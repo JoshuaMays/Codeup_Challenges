@@ -1,6 +1,8 @@
 <?php
 
 function is_palindrome($string) {
+	// Remove punctuation from string.
+	$string = preg_replace("/\p{P}/u", "", $string);
 	// Remove spaces from string.
 	$string = str_replace(' ', '', $string);
 	// Duplicate the string to compare the reversed version.
@@ -16,7 +18,7 @@ function is_palindrome($string) {
 
 }
 
-$string = "A man a plan a canal panama";
+$string = "A dog! A panic in a pagoda!";
 
 $amIPalindrome = is_palindrome($string);
 
