@@ -15,8 +15,8 @@ function alphabetSoup($str) {
 		// Convert word into array of its letters
 		$wordArray = str_split($grabWord);
 
-		// Alphabetically sort the letters
-		asort($wordArray);
+		// Alphabetically sort the letters, case-insensitive.
+		natcasesort($wordArray);
 
 		// Convert sorted letter array into a string holding the "word"
 		$alphebatizedWord = implode($wordArray);
@@ -31,7 +31,7 @@ function alphabetSoup($str) {
 	return $alphabetizedString;
 }
 
-$str = 'hello world';
+$str = 'This is a longer sentence than hello world';
 
 $str = alphabetSoup($str);
 
