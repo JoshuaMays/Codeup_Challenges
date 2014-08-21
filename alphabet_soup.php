@@ -37,6 +37,4 @@ $str = alphabetSoup($str);
 
 echo $str . PHP_EOL;
 
-
-
 ?>
