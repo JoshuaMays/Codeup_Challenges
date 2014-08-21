@@ -9,9 +9,9 @@ function is_palindrome($string) {
 	$comparisonString = $string;
 	// Reverse the letters in the string.
 	$reverseString = strrev($comparisonString);
-
+	// Compare the two strings
 	$compare = strcasecmp($string, $reverseString);
-
+	// set a boolean variable true if we have a palindrome, false if not.
 	$amIPalindrome = $compare == 0 ? true : false;
 
 	return $amIPalindrome;
