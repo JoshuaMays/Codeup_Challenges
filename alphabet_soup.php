@@ -7,6 +7,7 @@ function alphabetSoup($str) {
 	// Supply empty array to hold alphabetized words
 	$savingArray = [];
 	foreach ($arrayFromString as $words) {
+		// Create a working array to store words to alphabetize
 		$workingArray = [];
 
 		// Grab first word in the array to work with it.
