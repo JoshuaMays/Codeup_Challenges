@@ -1,20 +1,19 @@
 <?php
 
-
-function sumOfSquares($range) {
+function sumOfSquares($number) {
 	$sum = 0;
 
-	for ($i=1; $i<=$range; $i++) {
+	for ($i=1; $i<=$number; $i++) {
 		// Square iterator then add to sum
 		$sum += $i*$i;
 	}
 	return $sum;
 }
 
-function squareOfSum($range) {
+function squareOfSum($number) {
 	$sum = 0;
 	
-	for ($i = 1; $i <= $range; $i++) {
+	for ($i = 1; $i <= $number; $i++) {
 		// add iterator to sum
 		$sum += $i;
 	}	
@@ -22,7 +21,10 @@ function squareOfSum($range) {
 	return $sum *= $sum;
 }
 
-$difference = squareOfSum(100) - sumOfSquares(100);
+$number = 10;
+
+$difference = squareOfSum($number) - sumOfSquares($number);
 
 echo $difference;
+
 ?>
