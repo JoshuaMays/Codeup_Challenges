@@ -95,7 +95,7 @@ function scoreRoll($dice) {
             }
         }
         if ($fiveOfKind == 1) {
-            $result['type'] = 'a five of a Kind';
+            $result['type'] = 'a five of a kind';
             $result['base_score'] = $base_score;
             $result['bonus'] = 100;
         }
@@ -156,6 +156,32 @@ function scoreRoll($dice) {
 // // sort history with highest occurring type first
 function logHistory(&$history, $type) {
     // todo
+    $history['rolls']++;
+    switch($type) {
+        case 'a five of a kind':
+        $history['5oK']++;
+            break;
+        case 'a four of a kind':
+            $history['4oK']++;
+            break;
+        case 'a three of a kind':
+            $history['3oK']++;
+            break;
+        case 'a full house':
+            $history['fullHouse']++;
+            break;
+        case 'a straight':
+            $history['straight']++;
+            break;
+        case 'two pair':
+            $history['twoPair']++;
+            break;
+        case 'a pair':
+            $history['pair']++;
+            break;
+        case 'nada':
+            break;
+    }
 }
 
 // // display stats from history log based on number of rolls
@@ -181,7 +207,7 @@ $score = 0;
 $rolls = 0;
 
 // track the roll type history
-// $history = [];
+$history = ['5oK' => 0, '4oK' => 0, '3oK' => 0, 'straight' => 0, 'fullHouse' => 0, 'twoPair' => 0, 'pair' => 0, 'rolls' => 0];
 
 // welcome the user
 echo "Welcome to Poker Dice!\n";
