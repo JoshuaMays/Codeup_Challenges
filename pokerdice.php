@@ -1,18 +1,23 @@
 <?php
+// TRACK THE TOTAL SCORE
+$score = 0;
 
-// function to take user input on STDIN
-// performing stringtoupper if $upper is true
+// TRACK THE TOTAL ROLLS
+$rolls = 0;
+
+// TRACK THE ROLL TYPE HISTORY
+$history = ['fiveOfKind' => 0, 'fourOfKind' => 0, 'threeOfKind' => 0, 'straight' => 0, 'fullHouse' => 0, 'twoPair' => 0, 'pair' => 0, 'rolls' => 0];
+
+// FUNCTION TO TAKE USER INPUT ON STDIN
 function getInput($upper = false) {
     $input = trim(fgets(STDIN));
     return $upper ? strtoupper($input) : $input;
 }
 
-// generate an array of 5 dice
-// each die should have a random roll between 1 and 6
-// sort the dice before returning
+// FUNCTION TO ROLL THE DICE
 function rollDice() {
     $dice = [];
-    // Generate 5 random dicerolls.
+    // GENERATE 5 RANDOM DICE ROLLS
     for ($i = 1; $i <= 5; $i++) {
         $dice[$i] = (string) mt_rand(1,6);
     }
@@ -20,9 +25,7 @@ function rollDice() {
     return $dice;
 }
 
-// show the dice array
-// output should be in the format...
-// Dice: 1 2 3 4 5
+// FUNCTION TO SHOW THE DICE ROLL VALUES
 function showDice($dice) {
     $rollString = 'Dice: ';
     foreach ($dice as $number) {
@@ -31,9 +34,8 @@ function showDice($dice) {
     return $rollString;
 }
 
-
-// determine the type of roll, the base score, and the bonus
-// for a given array of dice
+// FUNCTION TO SCORE THE DICE ROLLS
+// DETERMINES THE TYPE OF ROLL, BASE SCORE, AND BONUS POINTS
 function scoreRoll($dice) {
     $base_score = 0;
     $pair = 0;
@@ -43,16 +45,14 @@ function scoreRoll($dice) {
     $resultAdd = 0;
     $dieVals = [ 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0];
     
-    // print_r($dieVals);  // ************** TESTING LINE ****************
     
-    // generate a result in the following data structure
+    // SAVE THE TYPE, BASE SCORE AND BONUS POINTS AS AN ARRAY
     $result = ['type' => '', 'base_score' => 0, 'bonus' => 0];
     
-    // Scoring Loop
     foreach($dice as $rollValue) {
-        // Add the value of all the roles
+        // ADD THE ROLL VALUES TO GET THE BASE SCORE
         $base_score += $rollValue;
-        // Add 1 to each spot in $dieVals array to find pairs, three/four/five of kinds
+        // SAVE VALUES OF EACH DIE TO $dieVals ARRAY 
         switch($rollValue) {
             case 1:
                 $dieVals[1]++;
@@ -74,98 +74,85 @@ function scoreRoll($dice) {
                 break;
         }
     }
-        // print_r($dieVals);  // ************** TESTING LINE ****************
-        foreach ($dieVals as $valCount) {
-            switch ($valCount) {
-                case 5:
-                    $fiveOfKind++;
-                    break;
-                case 4:
-                    $fourOfKind++;
-                    break;
-                case 3:
-                    $threeOfKind++;
-                    break;
-                case 2:
-                    $pair++;
-                    break;
-                case 0:
-                case 1:
-                    break;
-            }
-        }
-        if ($fiveOfKind == 1) {
-            $result['type'] = 'a five of a kind';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 100;
-        }
-        elseif ($fourOfKind == 1) {
-            $result['type'] = 'a four of a kind';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 75;
-        }
-        elseif ($threeOfKind == 1 && $pair == 1) {
-            $result['type'] = 'a full house';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 50;
-        }
-        elseif ($threeOfKind == 1) {
-            $result['type'] = 'a three of a kind';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 25;
-        }
-        elseif ($pair == 2) {
-            $result['type'] = 'two pair';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 15;
-        }
-        elseif ($pair == 1) { 
-            $result['type'] = 'a pair';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 5;
-        }
-        elseif ($base_score == 15 || $base_score == 20) {
-            $result['type'] = 'a straight';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 40;
-        }
-        else {
-            $result['type'] = 'nada';
-            $result['base_score'] = $base_score;
-            $result['bonus'] = 0;
-        }
 
-    // hand type and bonus point system
-    // five of a kind = 100
-    // four of a kind = 75
-    // a full house = 50
-    // a straight = 40
-    // three of a kind = 25
-    // two pair = 15
-    // a pair = 5
-    // nada = 0
+    // LOOP THROUGH $dieVals ARRAY TO DETERMINE TYPE OF ROLL
+    foreach ($dieVals as $valCount) {
+        switch ($valCount) {
+            case 5:
+                $fiveOfKind++;
+                break;
+            case 4:
+                $fourOfKind++;
+                break;
+            case 3:
+                $threeOfKind++;
+                break;
+            case 2:
+                $pair++;
+                break;
+            case 1:
+            case 0:
+                break;
+        }
+    }
 
-    // todo
-    
-    // return the result
+    // ASSIGN ROLL TYPE, BASE SCORE, AND BONUS TO $result ARRAY
+    if ($fiveOfKind == 1) {
+        $result['type'] = 'a five of a kind';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 100;
+    }
+    elseif ($fourOfKind == 1) {
+        $result['type'] = 'a four of a kind';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 75;
+    }
+    elseif ($threeOfKind == 1 && $pair == 1) {
+        $result['type'] = 'a full house';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 50;
+    }
+    elseif ($threeOfKind == 1) {
+        $result['type'] = 'a three of a kind';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 25;
+    }
+    elseif ($pair == 2) {
+        $result['type'] = 'two pair';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 15;
+    }
+    elseif ($pair == 1) { 
+        $result['type'] = 'a pair';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 5;
+    }
+    elseif ($base_score == 15 || $base_score == 20) {
+        $result['type'] = 'a straight';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 40;
+    }
+    else {
+        $result['type'] = 'nada';
+        $result['base_score'] = $base_score;
+        $result['bonus'] = 0;
+    }
+
     return $result;
 }
 
-// // add an entry to the history log to keep track
-// // of how many rolls there have been of a given type
-// // sort history with highest occurring type first
-function logHistory(&$history, $type) {
-    // todo
-    $history['rolls']++;
-    switch($type) {
+// FUNCTION TO LOG THE ROLL HISTORY
+function logHistory(&$history, $rollType) {
+    // DEPENDING ON THE ROLL TYPE, INCREMENT THE NUMBER OF HITS PER ROLL TYPE
+    switch($rollType) {
         case 'a five of a kind':
-        $history['5oK']++;
+            $history['fiveOfKind']++;
             break;
         case 'a four of a kind':
-            $history['4oK']++;
+            $history['fourOfKind']++;
             break;
         case 'a three of a kind':
-            $history['3oK']++;
+            $history['threeOfKind']++;
             break;
         case 'a full house':
             $history['fullHouse']++;
@@ -184,75 +171,61 @@ function logHistory(&$history, $type) {
     }
 }
 
-// // display stats from history log based on number of rolls
-// // desired display format:
-// // >> STATS ------------
-// // a pair: 47.47 %
-// // two pair: 23.67 %
-// // three of a kind: 15.43 %
-// // a straight: 7.42 %
-// // a full house: 3.77 %
-// // four of a kind: 2.24 %
-// // << STATS -------------
-// function showStats($history, $totalRolls) {
-//     echo ">> STATS ------------\n";
-//     // todo
-//     echo "<< STATS -------------\n";
-// }
+// FUNCTION TO DISPLAY THE STATS FROM HISTORY LOG
+function showStats($history, $totalRolls) {
+    echo ">> STATS ------------" .PHP_EOL;
+    echo "a pair: " . number_format(($history['pair'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "two pair: " . number_format(($history['twoPair'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "three of a kind: " . number_format(($history['threeOfKind'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "a straight: " . number_format(($history['straight'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "a full house: " . number_format(($history['fullHouse'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "four of a kind: " . number_format(($history['fourOfKind'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "five of a kind: " . number_format(($history['fiveOfKind'] / $totalRolls)*100, 2) . "%" . PHP_EOL;
+    echo "<< STATS -------------" . PHP_EOL;
+}
 
-// track the total score
-$score = 0;
-
-// track the total rolls
-$rolls = 0;
-
-// track the roll type history
-$history = ['5oK' => 0, '4oK' => 0, '3oK' => 0, 'straight' => 0, 'fullHouse' => 0, 'twoPair' => 0, 'pair' => 0, 'rolls' => 0];
-
-// welcome the user
-echo "Welcome to Poker Dice!\n";
-echo "Press enter to get started with your first roll...\n";
+// WELCOME USER
+echo "**************************************************" . PHP_EOL;
+echo "Welcome to Poker Dice!" . PHP_EOL;
+echo "Press enter to get started with your first roll..." . PHP_EOL;
+echo "**************************************************" . PHP_EOL;
 
 $input = getInput(true);
 
 while ($input != 'Q') {
-    // roll the dice
-    // todo
+    // ROLL THE DICE
     $dice = rollDice();
+    $rolls++;
     showDice($dice);
     
-    // score the result
-    // todo: use scoreRoll function
+    // SCORE THE RESULT
     $rollResults = scoreRoll($dice);
-    // print_r($rollResults);
     
-    // add the current roll to the total score
-    // todo
+    // ADD CURRENT ROLL SCORE TO TOTAL ROLL SCORE
     $score += ($rollResults['base_score'] + $rollResults['bonus']);
-    // echo $score . PHP_EOL;
     
-    // log the roll type history
-    // todo: use logHistory function
 
-    // show the dice
-    // todo: use showDice function
+    // LOG ROLL HISTORY
+    logHistory($history, $rollResults['type']);
+
+    // SHOW THE VALUES OF THE DICE ROLLED
     echo showDice($dice) . PHP_EOL;
     
-    // display roll type, base score, and bonus
-    // ex: You rolled a straight for a base score of 20 and a bonus of 40.
-    // todo
+    // DISPLAY ROLL TYPE, BASE SCORE, AND THE BONUS POINTS OF THE ROLL
+    echo "~~~~~~~~~~~~~~~" . PHP_EOL;
     echo 'You rolled ' . $rollResults['type'] . ' for a base score of ' . $rollResults['base_score'] 
        . ' and a bonus of ' . $rollResults['bonus'] . '.' . PHP_EOL;
     
-    // display total score
-    // ex: Total Score: 32306, in 849 rolls.
-    // todo
-    echo 'Total Score: ' . $score . PHP_EOL;
-    // show roll type statistics
-    // todo: use showStats function
+    // DISPLAY SCORE OF ALL ROLLS
+    echo 'Total Score: ' . $score . ' in ' . $rolls . ' rolls.' . PHP_EOL . PHP_EOL;
+    
+    // SHOW ROLL STATISTICS
+    showStats($history,$rolls);
 
-    // prompt use to roll again or quit
-    echo "Press enter to roll again, or Q to quit.\n";
+    // PROMPT USER TO ROLL AGAIN OR QUIT
+    echo PHP_EOL . "****************************************" . PHP_EOL;
+    echo "Press enter to roll again, or Q to quit." . PHP_EOL;
+    echo "****************************************" . PHP_EOL;
     $input = getInput(true);
 }
 
