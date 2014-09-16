@@ -1,3 +1,4 @@
 # Codeup Challenge Repo
 
-Storing all of the in progress and completed programming challenges supplied by Codeup.
+These files are solutions to challenge problems provided to Codeup students as extracurricular practice with PHP and JS.
+
